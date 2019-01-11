@@ -1,11 +1,16 @@
 package com.xxl.job.admin.controller;
 
 import com.xxl.job.admin.controller.annotation.PermessionLimit;
-import com.xxl.job.admin.controller.interceptor.PermissionInterceptor;
 import com.xxl.job.admin.core.util.I18nUtil;
+import com.xxl.job.admin.model.User;
 import com.xxl.job.admin.service.XxlJobService;
 import com.xxl.job.core.biz.model.ReturnT;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,42 +56,41 @@ public class IndexController {
 	@RequestMapping("/toLogin")
 	@PermessionLimit(limit=false)
 	public String toLogin(Model model, HttpServletRequest request) {
-		if (PermissionInterceptor.ifLogin(request)) {
+		Session session = SecurityUtils.getSubject().getSession();
+		if (session.getAttribute("userSession") != null) {
 			return "redirect:/";
 		}
 		return "login";
 	}
-	
-	@RequestMapping(value="login", method=RequestMethod.POST)
+	/**
+	 * shiro框架登录
+	 * @param user
+	 */
 	@ResponseBody
-	@PermessionLimit(limit=false)
-	public ReturnT<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName, String password, String ifRemember){
-		// valid
-		if (PermissionInterceptor.ifLogin(request)) {
-			return ReturnT.SUCCESS;
+	@RequestMapping(value = "/login",method=RequestMethod.POST)
+	public ReturnT<String>  login(User user){
+		// 表面校验
+		if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())){
+			new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
 		}
-
-		// param
-		if (StringUtils.isBlank(userName) || StringUtils.isBlank(password)){
-			return new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
+		// 获取主体
+		Subject subject = SecurityUtils.getSubject();
+		try{
+			// 调用安全认证框架的登录方法
+			subject.login(new UsernamePasswordToken(user.getUsername(), user.getPassword()));
+		}catch(AuthenticationException ex){
+			new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
+			return ReturnT.FAIL;
 		}
-		boolean ifRem = (StringUtils.isNotBlank(ifRemember) && "on".equals(ifRemember))?true:false;
-
-		// do login
-		boolean loginRet = PermissionInterceptor.login(response, userName, password, ifRem);
-		if (!loginRet) {
-			return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
-		}
+		// 登录成功后重定向到首页
+//		return new ModelAndView("redirect:/");
 		return ReturnT.SUCCESS;
 	}
-	
 	@RequestMapping(value="logout", method=RequestMethod.POST)
 	@ResponseBody
-	@PermessionLimit(limit=false)
-	public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response){
-		if (PermissionInterceptor.ifLogin(request)) {
-			PermissionInterceptor.logout(request, response);
-		}
+	public ReturnT<String> logout(){
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
 		return ReturnT.SUCCESS;
 	}
 	

@@ -10,6 +10,7 @@ import com.xxl.job.admin.service.XxlJobService;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.glue.GlueTypeEnum;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,9 +58,10 @@ public class JobInfoController {
 		
 		return xxlJobService.pageList(start, length, jobGroup, jobDesc, executorHandler, filterTime);
 	}
-	
+
 	@RequestMapping("/add")
 	@ResponseBody
+	@RequiresPermissions("/system")
 	public ReturnT<String> add(XxlJobInfo jobInfo) {
 		return xxlJobService.add(jobInfo);
 	}

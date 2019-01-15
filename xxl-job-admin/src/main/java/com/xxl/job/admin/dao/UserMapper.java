@@ -1,9 +1,11 @@
 package com.xxl.job.admin.dao;
 
+import com.github.pagehelper.PageInfo;
 import com.xxl.job.admin.model.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.xxl.job.admin.sqlProvider.UserProvider;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -15,4 +17,10 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
     @Select("select * from user where username = #{username}")
     public User selectByUsername(@Param("username") String username);
+    @SelectProvider(type = UserProvider.class,method = "selectByPage")
+    public List<User> selectByPage(@Param("user") User user);
+    @Delete("delete from user where id = #{userId}")
+    public void delUser(Integer userId);
+    @Insert("insert into user (username,password) values (#{username},#{password})")
+    public void addUser(User user);
 }

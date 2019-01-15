@@ -8,31 +8,25 @@ public class RoleResources implements Serializable {
     private static final long serialVersionUID = -8559867942708057891L;
 //    @Id
 //    @Column(name = "roleId")
-    private Integer roleid;
+    private Integer roleId;
 
 //    @Id
 //    @Column(name = "resourcesId")
-    private String resourcesid;
+    private String resourcesId;
 
-    /**
-     * @return roleId
-     */
-    public Integer getRoleid() {
-        return roleid;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    /**
-     * @param roleid
-     */
-    public void setRoleid(Integer roleid) {
-        this.roleid = roleid;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
-    public String getResourcesid() {
-        return resourcesid;
+    public String getResourcesId() {
+        return resourcesId;
     }
 
-    public void setResourcesid(String resourcesid) {
-        this.resourcesid = resourcesid;
+    public void setResourcesId(String resourcesId) {
+        this.resourcesId = resourcesId;
     }
 }

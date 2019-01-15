@@ -61,7 +61,7 @@ public class JobInfoController {
 
 	@RequestMapping("/add")
 	@ResponseBody
-	@RequiresPermissions("/system")
+	@RequiresPermissions("/usersPage")
 	public ReturnT<String> add(XxlJobInfo jobInfo) {
 		return xxlJobService.add(jobInfo);
 	}

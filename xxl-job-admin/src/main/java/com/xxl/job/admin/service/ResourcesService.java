@@ -1,5 +1,6 @@
 package com.xxl.job.admin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.xxl.job.admin.model.Resources;
 
 import java.util.List;
@@ -13,4 +14,9 @@ import java.util.Map;
  **/
 public interface ResourcesService {
     public List<Resources> loadUserResources(Map<String, Object> map);
+    public PageInfo<Resources> selectByPage(Resources resources,int start, int length);
+    public List<Resources> queryResourcesListWithSelected(Integer rid);
+    public List<Resources> queryAll();
+    public void addResources(Resources resources);
+    public void deleteById(Integer id);
 }

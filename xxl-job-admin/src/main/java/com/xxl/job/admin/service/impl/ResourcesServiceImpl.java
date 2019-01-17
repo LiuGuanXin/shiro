@@ -1,5 +1,6 @@
 package com.xxl.job.admin.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.xxl.job.admin.dao.ResourcesMapper;
 import com.xxl.job.admin.model.Resources;
 import com.xxl.job.admin.service.ResourcesService;
@@ -22,5 +23,30 @@ public class ResourcesServiceImpl implements ResourcesService {
     @Override
     public List<Resources> loadUserResources(Map<String, Object> map) {
         return resourcesMapper.loadUserResources(map);
+    }
+
+    @Override
+    public PageInfo<Resources> selectByPage(Resources resources, int start, int length) {
+        return null;
+    }
+
+    @Override
+    public List<Resources> queryResourcesListWithSelected(Integer rid) {
+        return null;
+    }
+
+    @Override
+    public List<Resources> queryAll() {
+        return resourcesMapper.queryAll();
+    }
+
+    @Override
+    public void addResources(Resources resources) {
+
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+
     }
 }

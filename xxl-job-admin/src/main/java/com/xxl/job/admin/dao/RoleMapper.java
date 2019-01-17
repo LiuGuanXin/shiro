@@ -36,4 +36,7 @@ public interface RoleMapper {
     public void deleteRole(Integer roleId);
     @Insert("insert into role (id,roleDesc) values(#{id},#{roleDesc})")
     public void addRole (Role role);
+
+    @Select("select * from role where id = #{id}")
+    public Role queryRole(Integer id);
 }

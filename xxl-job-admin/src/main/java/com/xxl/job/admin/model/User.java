@@ -18,6 +18,15 @@ public class User implements Serializable {
      */
     private Integer enable;
 
+    public User() {
+    }
+
+    public User(Integer id,String username, Integer enable) {
+        this.id = id;
+        this.username = username;
+        this.enable = enable;
+    }
+
     /**
      * @return id
      */

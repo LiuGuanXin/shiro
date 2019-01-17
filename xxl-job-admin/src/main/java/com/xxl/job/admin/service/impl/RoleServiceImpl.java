@@ -28,7 +28,9 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> queryRoleListWithSelected(Integer uid) {
         return roleMapper.queryRoleListWithSelected(uid);
     }
-
+    public Role queryRole(Integer id){
+        return roleMapper.queryRole(id);
+    }
     @Override
     public PageInfo<Role> selectByPage(Role role, int start, int length) {
         int page = start/length + 1;

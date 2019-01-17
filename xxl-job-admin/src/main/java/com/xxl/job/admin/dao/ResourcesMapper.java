@@ -4,6 +4,7 @@ import com.xxl.job.admin.model.Resources;
 import com.xxl.job.admin.sqlProvider.ResourcesProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
@@ -20,5 +21,6 @@ public interface ResourcesMapper {
     @SelectProvider(type = ResourcesProvider.class,method = "loadUserResources")
     public List<Resources> loadUserResources(@Param("map") Map<String, Object> map);
 
-
+    @Select("select * from resources")
+    public List<Resources> queryAll();
 }

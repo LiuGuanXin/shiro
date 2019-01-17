@@ -1,5 +1,8 @@
 package com.xxl.job.admin.config;
 
+import com.github.pagehelper.util.StringUtil;
+import com.xxl.job.admin.model.Resources;
+import com.xxl.job.admin.service.ResourcesService;
 import com.xxl.job.admin.shiro.MyCustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -8,11 +11,14 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Import;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +29,10 @@ import java.util.Map;
  **/
 @Configuration
 public class ShiroConfig {
+    @Autowired
+    private ResourcesService resourcesServiceImpl;
+//    @Autowired
+//    ShiroService shiroService;
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -35,7 +45,8 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSuccessUrl("/");
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        //游客，开发权限
+//        //游客，开发权限
+        filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/guest/**", "anon");
         //用户，需要角色权限 “user”
         filterChainDefinitionMap.put("/user/**", "roles[user]");
@@ -44,12 +55,11 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**","anon");
          filterChainDefinitionMap.put("/asset/**","anon");
         filterChainDefinitionMap.put("/templates/**","anon");
-        //开放登陆接口
+        //开放登陆接口NIWOCAINIMA
         filterChainDefinitionMap.put("/login", "anon");
-        //其余接口一律拦截
-        //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
+//        //其余接口一律拦截
+//        //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
         filterChainDefinitionMap.put("/**", "authc");
-
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         System.out.println("Shiro拦截器工厂类注入成功");
         return shiroFilterFactoryBean;

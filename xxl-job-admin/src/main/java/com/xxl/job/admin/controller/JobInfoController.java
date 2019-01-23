@@ -6,11 +6,17 @@ import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
 import com.xxl.job.admin.core.trigger.TriggerTypeEnum;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
+import com.xxl.job.admin.model.User;
+import com.xxl.job.admin.service.UserTriggerService;
 import com.xxl.job.admin.service.XxlJobService;
+import com.xxl.job.admin.service.impl.UserTriggerServiceImpl;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.glue.GlueTypeEnum;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+
+import static com.xxl.job.core.biz.model.ReturnT.FAIL_CODE;
 
 /**
  * index controller
@@ -33,7 +41,8 @@ public class JobInfoController {
 	private XxlJobGroupDao xxlJobGroupDao;
 	@Resource
 	private XxlJobService xxlJobService;
-	
+	@Autowired
+	private UserTriggerService userTriggerServiceImpl;
 	@RequestMapping
 	public String index(Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
 
@@ -55,7 +64,7 @@ public class JobInfoController {
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,  
 			@RequestParam(required = false, defaultValue = "10") int length,
 			int jobGroup, String jobDesc, String executorHandler, String filterTime) {
-		
+
 		return xxlJobService.pageList(start, length, jobGroup, jobDesc, executorHandler, filterTime);
 	}
 
@@ -69,13 +78,27 @@ public class JobInfoController {
 	@RequestMapping("/update")
 	@ResponseBody
 	public ReturnT<String> update(XxlJobInfo jobInfo) {
-		return xxlJobService.update(jobInfo);
+		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		int userId = userTriggerServiceImpl.queryUserIdByTriggerId(jobInfo.getId());
+		if (userId == user.getId()){
+			return xxlJobService.update(jobInfo);
+		}else {
+			return new ReturnT<String>(500,"没有修改权限");
+		}
+
 	}
 	
 	@RequestMapping("/remove")
 	@ResponseBody
 	public ReturnT<String> remove(int id) {
-		return xxlJobService.remove(id);
+		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		Integer userId = userTriggerServiceImpl.queryUserIdByTriggerId(id);
+		if (userId != null && userId.equals(user.getId())){
+			return xxlJobService.remove(id);
+		}else {
+			return new ReturnT<String>(500,"没有删除权限");
+		}
+
 	}
 	
 	@RequestMapping("/stop")		// TODO, pause >> stop

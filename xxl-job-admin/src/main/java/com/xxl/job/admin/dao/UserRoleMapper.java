@@ -5,6 +5,7 @@ import com.xxl.job.admin.model.UserRole;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface UserRoleMapper {
 
     @Insert("insert into user_role (userId,roleId) values (#{userId},#{roleId})")
     public void insertUserRole(UserRole userRole);
-
-    public List<Integer> findUserIdByRoleId(Integer roleId);
+    @Select("select roleId from user_role where userId = #{userId}")
+    public List<Integer> getRoleIdByUser(Integer roleId);
 }

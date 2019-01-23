@@ -49,11 +49,13 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/guest/**", "anon");
         //用户，需要角色权限 “user”
+
         filterChainDefinitionMap.put("/user/**", "roles[user]");
         //管理员，需要角色权限 “admin”
         filterChainDefinitionMap.put("/admin/**", "roles[admin]");
         filterChainDefinitionMap.put("/static/**","anon");
          filterChainDefinitionMap.put("/asset/**","anon");
+        filterChainDefinitionMap.put("/checkPermission/**","anon");
         filterChainDefinitionMap.put("/templates/**","anon");
         //开放登陆接口NIWOCAINIMA
         filterChainDefinitionMap.put("/login", "anon");

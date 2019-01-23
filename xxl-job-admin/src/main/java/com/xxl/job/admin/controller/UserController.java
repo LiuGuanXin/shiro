@@ -9,6 +9,7 @@ import com.xxl.job.admin.model.UserRole;
 import com.xxl.job.admin.service.UserRoleService;
 import com.xxl.job.admin.service.UserService;
 import com.xxl.job.admin.util.PasswordHelper;
+import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.glue.GlueTypeEnum;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -72,15 +73,7 @@ public Map<String, Object> pageList(@RequestParam(required = false, defaultValue
 }
     @RequiresRoles("1")
     @RequestMapping
-    public String getAll(Model model,User user, String draw,
-                                     @RequestParam(required = false, defaultValue = "1") int start,
-                                     @RequestParam(required = false, defaultValue = "10") int length){
-//        PageInfo<User> pageInfo = userService.selectByPage(user, start, length);
-//        model.addAttribute("list",pageInfo.getList());
-//        model.addAttribute("draw",draw);
-//        model.addAttribute("recordsTotal",pageInfo.getTotal());
-//        model.addAttribute("recordsFiltered",pageInfo.getTotal());
-//        System.out.println("pageInfo.getTotal():"+pageInfo.getTotal());
+    public String getAll(){
         return "user/user.index";
     }
     /**
@@ -91,31 +84,31 @@ public Map<String, Object> pageList(@RequestParam(required = false, defaultValue
      */
     @ResponseBody
     @RequestMapping("/saveUserRoles")
-    public String saveUserRoles(UserRole userRole){
+    public ReturnT<String> saveUserRoles(UserRole userRole){
         if(StringUtils.isEmpty(userRole.getUserId()))
-            return "error";
+            return ReturnT.FAIL;
         try {
             userRoleService.addUserRole(userRole);
-            return "success";
+            return ReturnT.SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
-            return "fail";
+            return ReturnT.FAIL;
         }
     }
     @ResponseBody
     @RequestMapping(value = "/add")
-    public String add(User user) {
-        return userService.addUser(user);
+    public ReturnT<String> add(User user) {
+        return new ReturnT<>(userService.addUser(user));
     }
     @ResponseBody
     @RequestMapping(value = "/delete")
-    public String delete(Integer id){
+    public ReturnT<String> delete(Integer id){
         try{
             userService.delUser(id);
-            return "success";
+            return ReturnT.SUCCESS;
         }catch (Exception e){
             e.printStackTrace();
-            return "fail";
+            return ReturnT.FAIL;
         }
     }
 

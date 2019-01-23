@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -57,7 +58,20 @@ public class IndexController {
         ReturnT<Map<String, Object>> chartInfo = xxlJobService.chartInfo(startDate, endDate);
         return chartInfo;
     }
-	
+	@RequestMapping("/checkPermission")
+	@ResponseBody
+	public Map<String,String> checkPermission() {
+		Map<String,String> map = new HashMap<>();
+		try{
+			SecurityUtils.getSubject().checkRole("1");
+		}catch (Exception e){
+			e.printStackTrace();
+			map.put("flag","true");
+			return map;
+		}
+		map.put("flag","false");
+		return map;
+	}
 	@RequestMapping("/toLogin")
 	@PermessionLimit(limit=false)
 	public String toLogin(Model model, HttpServletRequest request) {

@@ -9,6 +9,8 @@ import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
 import com.xxl.job.admin.dao.XxlJobLogDao;
 import com.xxl.job.admin.dao.XxlJobLogGlueDao;
+import com.xxl.job.admin.model.User;
+import com.xxl.job.admin.service.UserTriggerService;
 import com.xxl.job.admin.service.XxlJobService;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
@@ -17,11 +19,14 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.shiro.SecurityUtils;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
@@ -34,7 +39,8 @@ import java.util.*;
 @Service
 public class XxlJobServiceImpl implements XxlJobService {
 	private static Logger logger = LoggerFactory.getLogger(XxlJobServiceImpl.class);
-
+	@Autowired
+	private UserTriggerService userTriggerServiceImpl;
 	@Resource
 	private XxlJobGroupDao xxlJobGroupDao;
 	@Resource
@@ -67,6 +73,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 	}
 
 	@Override
+	@Transactional
 	public ReturnT<String> add(XxlJobInfo jobInfo) {
 		// valid
 		XxlJobGroup group = xxlJobGroupDao.load(jobInfo.getJobGroup());
@@ -120,6 +127,8 @@ public class XxlJobServiceImpl implements XxlJobService {
 
 		// add in db
 		xxlJobInfoDao.save(jobInfo);
+		User user = (User)SecurityUtils.getSubject().getPrincipal();
+		userTriggerServiceImpl.saveUserInfo(user.getId(),jobInfo.getId());
 		if (jobInfo.getId() < 1) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add")+I18nUtil.getString("system_fail")) );
 		}
@@ -200,6 +209,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 	}
 
 	@Override
+	@Transactional
 	public ReturnT<String> remove(int id) {
 		XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(id);
         String group = String.valueOf(xxlJobInfo.getJobGroup());
@@ -208,7 +218,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 		try {
 			// unbind quartz
 			XxlJobDynamicScheduler.removeJob(name, group);
-
+			userTriggerServiceImpl.delete(xxlJobInfo.getId());
 			xxlJobInfoDao.delete(id);
 			xxlJobLogDao.delete(id);
 			xxlJobLogGlueDao.deleteByJobId(id);

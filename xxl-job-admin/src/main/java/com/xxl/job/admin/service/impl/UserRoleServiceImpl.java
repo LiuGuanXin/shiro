@@ -45,4 +45,9 @@ public class UserRoleServiceImpl implements UserRoleService {
     public void delUserRole(Integer userId) {
         userRoleMapper.delUserRole(userId);
     }
+
+    @Override
+    public List<Integer> getRoleByUser(Integer userId) {
+        return userRoleMapper.getRoleIdByUser(userId);
+    }
 }

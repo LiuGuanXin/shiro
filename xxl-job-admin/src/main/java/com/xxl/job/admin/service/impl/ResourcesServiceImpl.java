@@ -1,5 +1,6 @@
 package com.xxl.job.admin.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xxl.job.admin.dao.ResourcesMapper;
 import com.xxl.job.admin.model.Resources;
@@ -26,8 +27,12 @@ public class ResourcesServiceImpl implements ResourcesService {
     }
 
     @Override
-    public PageInfo<Resources> selectByPage(Resources resources, int start, int length) {
-        return null;
+    public PageInfo<Resources> selectByPage(int start, int length) {
+        int page = start/length + 1;
+        //分页查询
+        PageHelper.startPage(page, length);
+        List<Resources> resourcesList = resourcesMapper.queryAll();
+        return new PageInfo<>(resourcesList);
     }
 
     @Override

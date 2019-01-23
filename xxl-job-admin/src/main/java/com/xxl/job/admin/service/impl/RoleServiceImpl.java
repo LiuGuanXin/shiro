@@ -32,11 +32,11 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.queryRole(id);
     }
     @Override
-    public PageInfo<Role> selectByPage(Role role, int start, int length) {
+    public PageInfo<Role> selectByPage(int start, int length) {
         int page = start/length + 1;
         //分页查询
         PageHelper.startPage(page, length);
-        List<Role> rolesList = roleMapper.selectRolesList(role);
+        List<Role> rolesList = roleMapper.selectRolesList();
         return new PageInfo<>(rolesList);
     }
 

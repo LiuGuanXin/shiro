@@ -22,8 +22,8 @@ public interface RoleMapper {
             "ur WHERE ur.userId= #{uid} AND ur.roleId = r.id) THEN 1 ELSE 0 END) AS selected FROM role r")
     public List<Role> queryRoleListWithSelected(Integer uid);
 
-    @Select("SELECT * FROM role WHERE id = #{id}")
-    public List<Role> selectRolesList(Role role);
+    @Select("SELECT * FROM role")
+    public List<Role> selectRolesList();
 
 
     @Select("SELECT * FROM role WHERE id = #{id}")

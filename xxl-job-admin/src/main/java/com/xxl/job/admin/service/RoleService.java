@@ -11,7 +11,7 @@ public interface RoleService {
     public List<Role> queryRoleListWithSelected(Integer uid);
 
     public Role queryRole(Integer id);
-    PageInfo<Role> selectByPage(Role role, int start, int length);
+    PageInfo<Role> selectByPage(int start, int length);
 
     /**
      * 删除角色 同时删除角色资源表中的数据

@@ -1,6 +1,7 @@
 package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.core.model.XxlJobInfo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,5 +37,6 @@ public interface XxlJobInfoDao {
 	public List<XxlJobInfo> getJobsByGroup(@Param("jobGroup") int jobGroup);
 
 	public int findAllCount();
-
+//	@Insert("INSERT INTO user_trigger_info(userId,triggerId) value(#{userId},#{triggerId})")
+//	public int saveUserInfo(@Param("userId")int userId,@Param("triggerId")int triggerId);
 }

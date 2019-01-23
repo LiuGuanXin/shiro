@@ -10,6 +10,7 @@ import com.xxl.job.admin.model.UserRole;
 import com.xxl.job.admin.service.UserRoleService;
 import com.xxl.job.admin.service.UserService;
 
+import com.xxl.job.admin.service.UserTriggerService;
 import com.xxl.job.admin.util.PasswordHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
-//    @Autowired
-//    private Mapper<User> mapper;
+    @Autowired
+    private UserTriggerService UserTriggerServiceImpl;
     @Autowired
     private UserRoleService userRoleServiceImpl;
     @Override
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
         userMapper.delUser(userId);
         //删除用户角色表
         userRoleServiceImpl.delUserRole(userId);
+        UserTriggerServiceImpl.deleteByUser(userId);
     }
 
     @Override

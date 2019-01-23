@@ -6,6 +6,7 @@ import com.xxl.job.admin.model.Role;
 import com.xxl.job.admin.model.User;
 import com.xxl.job.admin.service.ResourcesService;
 import com.xxl.job.admin.service.RoleService;
+import com.xxl.job.admin.service.UserRoleService;
 import com.xxl.job.admin.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -33,7 +34,7 @@ public class MyCustomRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
     @Autowired
-    private RoleService roleService;
+    private UserRoleService userRoleService;
     @Autowired
     private ResourcesService resourcesService;
 
@@ -49,14 +50,18 @@ public class MyCustomRealm extends AuthorizingRealm {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("userid",user.getId());
         List<Resources> resourcesList = resourcesService.loadUserResources(map);
-        Role role = roleService.queryRole(user.getId());
+        List<Integer> roles = userRoleService.getRoleByUser(user.getId());
         // 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        for(Resources resources: resourcesList){
-            info.addStringPermission(resources.getResurl());
+        if (resourcesList != null && resourcesList.size() > 0){
+            for(Resources resources: resourcesList){
+                info.addStringPermission(resources.getResurl());
+            }
         }
-        if (role != null){
-            info.addRole(String.valueOf(role.getId()));
+        if (roles != null && roles.size() > 0){
+            for(Integer integer: roles){
+                info.addRole(String.valueOf(integer));
+            }
         }
         return info;
     }

@@ -272,19 +272,62 @@ $(function() {
 
         $("#addModal .form input[name='executorHandler']").removeAttr("readonly");
     });
-    $(function () { $('#addUserModal').on('hide.bs.modal', function () {
-        // 关闭时清空edit状态为add
-        $("#act").val("add");
-        location.reload();
-    })
-    });
+    // $(function () {
+    //     $('#addUserModal').on('hide.bs.modal', function () {
+    //     // 关闭时清空edit状态为add
+    //     $("#act").val("add");
+    //     location.reload();
+    // })
+    // }
+    // );
 
 
 
     $("#user_list").on('click', '.user_role',function() {
-        $('#addRole').modal({backdrop: false, keyboard: false}).modal('show');
+        //弹出选择角色的框
+        var id = $(this).parent('p').attr("id");
+        $.ajax({
+            async:false,
+            type : "POST",
+            data:{uid:id},
+            url: 'roles/rolesWithSelected',
+            dataType:'json',
+            success: function(data){
+                $("#addRole .form").empty();
+                var htm = "<div class='form-group'><input type='hidden' name='userId' value='"+id+"'>";
+                for(var i=0;i<data.length;i++){
+                    htm += "<div class='checkbox'><label><input type='checkbox' name='roleId' value='"+data[i].id+"'";
+                    if(data[i].selected==1){
+                        htm += " checked='checked'";
+                    }
+                    htm +="/>"+data[i].roleDesc+"</label></div></div>";
+                }
+                $("#addRole .form").append(htm);
+            }
+        });
+        $('#addRole').modal();
+        // $('#addRole').modal({backdrop: false, keyboard: false}).modal('show');
     });
 });
+//保存角色的选择
+function saveUserRoles() {
+    $.ajax({
+        cache: true,
+        type: "POST",
+        url:'users/saveUserRoles',
+        data:$('#addRole .form').serialize(),// 你的formid
+        async: false,
+        success: function(data) {
+            if(data=="success"){
+                 layer.msg('保存成功');
+                $('#addRole').modal('hide');
+            }else{
+                 layer.msg('保存失败');
+                $('#addRole').modal('hide');
+            }
+        }
+    })
+}
 
 
 // Com Alert by Tec theme

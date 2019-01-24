@@ -6,7 +6,7 @@
 	<!-- DataTables -->
   	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   	<!-- daterangepicker -->
-  	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+  	<#--<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">-->
     <title>${I18n.admin_name}</title>
     <#--<style type="text/css">-->
         <#--#userRole{-->
@@ -85,7 +85,7 @@
 			              	<table id="resources_list" class="table table-bordered table-striped display" width="100%" >
 				                <thead>
 					            	<tr>
-                                        <th name="id" >角色编号</th>
+                                        <th name="id" >资源编号</th>
                                         <th name="name" >资源名称</th>
                                         <th name="parentid" >父资源</th>
                                         <th name="resurl" >资源链接</th>
@@ -124,11 +124,11 @@
                     <form class="form-horizontal form" role="form" >
                         <div class="form-group">
                             <label for="lastname" class="col-sm-2 control-label">资源名称<font color="red">*</font></label>
-                            <div class="col-sm-4"><input type="text" class="form-control" name="userName" placeholder="请输入资源名称" maxlength="10" ></div>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="name" placeholder="请输入资源名称" maxlength="10" ></div>
                         </div>
                         <div class="form-group">
                             <label for="lastname" class="col-sm-2 control-label">父资源ID<font color="red">*</font></label>
-                            <div class="col-sm-4"><input type="text" class="form-control" name="password" placeholder="请输入父资源ID" maxlength="5" ></div>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="parentid" placeholder="请输入父资源ID" maxlength="5" ></div>
                         </div>
                         <div class="form-group">
                             <label for="lastname" class="col-sm-2 control-label">资源链接<font color="red">*</font></label>
@@ -164,9 +164,9 @@
 <!-- DataTables -->
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="${request.contextPath}/static/plugins/jquery/jquery.validate.min.js"></script>
 <!-- daterangepicker -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
-<script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script src="${request.contextPath}/static/js/resources.index.1.js"></script>
 </body>
 </html>

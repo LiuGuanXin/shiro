@@ -3,7 +3,8 @@ $(function() {
     $(document).ready( function () {
         $('#resources_list').DataTable();
     } );
-
+    // table data
+    var tableData = {};
     // init date tables
     var resourcesTable = $("#resources_list").dataTable({
         "deferRender": true,
@@ -82,10 +83,10 @@ $(function() {
                 "width":'7%',
                 "render": function ( data, type, row ) {
                     return function(){
-
+                        tableData['key'+row.id] = row;
                         var html = '<p id="'+ row.id +'" >'+
                             '<button class="btn btn-warning btn-xs update" type="button">'+ I18n.system_opt_edit +'</button>  '+
-                            '<button class="btn btn-danger btn-xs job_operate" _type="job_del" type="button">'+ I18n.system_opt_del +'</button>  '
+                            '<button class="btn btn-danger btn-xs resources_operate" _type="resources_del" type="button">'+ I18n.system_opt_del +'</button>  '
                             + '</p>';
 
                         return html;
@@ -133,7 +134,159 @@ $(function() {
     $(".add").click(function(){
         $('#addModal').modal({backdrop: false, keyboard: false}).modal('show');
     });
+    var addModalValidate = $("#addModal .form").validate({
+        errorElement : 'span',
+        errorClass : 'help-block',
+        focusInvalid : true,
+        rules : {
+            name : {
+                required : true
+            },
+            parentid : {
+                required : true,
+                maxlength: 5
+            },
+            resurl : {
+                required : true
+            },
+            type : {
+                required : true
+            }
+        },
+        messages : {
+            name : {
+                required : "请输入资源名称"
+            },
+            parentid : {
+                required : "请输入父ID"
+            },
+            resurl : {
+                required : "请输入资源链接"
+            },
+            type : {
+                required : "请输入资源类型"
+            }
+        },
+        highlight : function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        success : function(label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+        errorPlacement : function(error, element) {
+            element.parent('div').append(error);
+        },
+        submitHandler : function(form) {
 
+            $.post(
+                base_url + "/resources/add",
+                $("#addModal .form").serialize(), function(data, status) {
+                    if (data.code == "200") {
+                        $('#addModal').modal('hide');
+                        layer.open({
+                            title: I18n.system_tips ,
+                            btn: [ I18n.system_ok ],
+                            content: I18n.system_add_suc ,
+                            icon: '1',
+                            end: function(layero, index){
+                                resourcesTable.fnDraw();
+                                //window.location.reload();
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: I18n.system_tips ,
+                            btn: [ I18n.system_ok ],
+                            content: (data.msg || I18n.system_add_fail),
+                            icon: '2'
+                        });
+                    }
+                });
+        }
+    });
+    $("#addModal").on('hide.bs.modal', function () {
+        $("#addModal .form")[0].reset();
+        addModalValidate.resetForm();
+        $("#addModal .form .form-group").removeClass("has-error");
+        $(".remote_panel").show();	// remote
+
+        // $("#addModal .form input[name='executorHandler']").removeAttr("readonly");
+    });
+    // update
+    $("#resources_list").on('click', '.update',function() {
+
+        var id = $(this).parent('p').attr("id");
+        var row = tableData['key'+id];
+
+        // base data
+        $("#addModal .form input[name='name']").val( row.name );
+        $("#addModal .form input[name='parentid']").val( row.parentid );
+        $("#addModal .form input[name='resurl']").val( row.resurl );
+        $('#addModal .form select[name=type] option[value='+ row.type +']').prop('selected', true);
+
+        // show
+        $('#addModal').modal({backdrop: false, keyboard: false}).modal('show');
+    });
+
+    // job operate
+    $("#role_list").on('click', '.resources_operate',function() {
+        var typeName;
+        var url;
+        var needFresh = false;
+
+        var type = $(this).attr("_type");
+        if ("resources_del" === type) {
+            typeName = I18n.system_opt_del ;
+            url = base_url + "/resources/delete";
+            needFresh = true;
+        } else {
+            return;
+        }
+
+        var id = $(this).parent('p').attr("id");
+
+        layer.confirm( I18n.system_ok + typeName + '?', {
+            icon: 3,
+            title: I18n.system_tips ,
+            btn: [ I18n.system_ok, I18n.system_cancel ]
+        }, function(index){
+            layer.close(index);
+
+            $.ajax({
+                type : 'POST',
+                url : url,
+                data : {
+                    "id" : id
+                },
+                dataType : "json",
+                success : function(data){
+                    if (data.code == 200) {
+
+                        layer.open({
+                            title: I18n.system_tips,
+                            btn: [ I18n.system_ok ],
+                            content: typeName + I18n.system_success ,
+                            icon: '1',
+                            end: function(layero, index){
+                                if (needFresh) {
+                                    //window.location.reload();
+                                    roleTable.fnDraw(false);
+                                }
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: I18n.system_tips,
+                            btn: [ I18n.system_ok ],
+                            content: (data.msg || typeName + I18n.system_fail ),
+                            icon: '2'
+                        });
+                    }
+                }
+            });
+        });
+    });
 });
 
 

@@ -93,17 +93,6 @@
 				                </thead>
 				                <tbody>
 
-                                <#--<#if list?exists && list?size gt 0>-->
-								<#--<#list list as l>-->
-									<#--<tr>-->
-                                    <#--&lt;#&ndash;<td>${group.id}</td>&ndash;&gt;-->
-                                        <#--<td>${l.id}</td>-->
-                                        <#--<td>${l.username}</td>-->
-                                        <#--<td>${l.enable}</td>-->
-                                    <#--</tr>-->
-                                <#--</#list>-->
-                                <#--</#if>-->
-
                                 </tbody>
 							</table>
 						</div>
@@ -148,28 +137,18 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" >分配角色</h4>
+                    <h4 class="modal-title">分配角色</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal form" role="form" >
-                        <div class="form-group">
-
-                            <div class="checkbox">
-                                <label class="left">
-                                    <input type="checkbox">
-                                    <p>管理员</p>
-                                </label>
-                                </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-6">
-                                <button type="submit" class="btn btn-primary"  >${I18n.system_save}</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">${I18n.system_cancel}</button>
-                                <input type="hidden" name="id" >
-                            </div>
-                        </div>
+                    <form class="form-horizontal form" role="form">
                     </form>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                            <button type="button" onclick="saveUserRoles();" class="btn btn-primary"  >${I18n.system_save}</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">${I18n.system_cancel}</button>
+                            <input type="hidden" name="id" >
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

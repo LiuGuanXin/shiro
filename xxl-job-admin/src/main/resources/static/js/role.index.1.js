@@ -51,9 +51,9 @@ $(function() {
                     return function(){
 
                         var html = '<p id="'+ row.id +'" >'+
-                            '<button class="btn btn-info btn-xs job_per" type="button">'+ '分配权限' +'</button>  '+
+                            '<button class="btn btn-info btn-xs user_role" type="button">'+ '分配权限' +'</button>  '+
                             // '<button class="btn btn-warning btn-xs update" type="button">'+ I18n.system_opt_edit +'</button>  '+
-                            '<button class="btn btn-danger btn-xs job_operate" _type="job_del" type="button">'+ I18n.system_opt_del +'</button>  '
+                            '<button class="btn btn-danger btn-xs role_operate" _type="role_del" type="button">'+ I18n.system_opt_del +'</button>  '
                             +
 
                             '</p>';
@@ -89,11 +89,39 @@ $(function() {
         }
     });
 
-    // logTips alert
-    // $('#joblog_list').on('click', '.logTips', function(){
-    //     var msg = $(this).find('span').html();
-    //     ComAlertTec.show(msg);
-    // });
+    $("#role_list").on('click', '.user_role',function() {
+        //弹出选择角色的框
+        var id = $(this).parent('p').attr("id");
+        roleId = id;
+        var setting = {
+            check: {
+                enable: true,
+                chkboxType:  { "Y" : "p", "N" : "s" }
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "parentid",
+                }
+            }
+        };
+        $.ajax({
+            async:false,
+            type : "POST",
+            data:{rid:id},
+            url: "resources/resourcesWithSelected",
+            dataType:'json',
+            success: function(data){
+
+                $.fn.zTree.init($("#treeDemo"), setting, data);
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                zTree.expandAll(true);
+                $('#selectResources').modal();
+            }
+        });
+        $('#addRole').modal();
+    });
 
     // search Btn
     $('#searchBtn').on('click', function(){
@@ -103,7 +131,127 @@ $(function() {
     $(".add").click(function(){
         $('#addModal').modal({backdrop: false, keyboard: false}).modal('show');
     });
+    var addModalValidate = $("#addModal .form").validate({
+        errorElement : 'span',
+        errorClass : 'help-block',
+        focusInvalid : true,
+        rules : {
+            roleDesc : {
+                required : true,
+                maxlength: 10
+            }
+        },
 
+        messages : {
+            roleDesc : {
+                required : "请输入角色名"
+            }
+        },
+        highlight : function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        success : function(label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+        errorPlacement : function(error, element) {
+            element.parent('div').append(error);
+        },
+        submitHandler : function(form) {
+
+            $.post(
+                base_url + "/roles/add",
+                $("#addModal .form").serialize(), function(data, status) {
+                    if (data.code == "200") {
+                        $('#addModal').modal('hide');
+                        layer.open({
+                            title: I18n.system_tips ,
+                            btn: [ I18n.system_ok ],
+                            content: I18n.system_add_suc ,
+                            icon: '1',
+                            end: function(layero, index){
+                                roleTable.fnDraw();
+                                //window.location.reload();
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: I18n.system_tips ,
+                            btn: [ I18n.system_ok ],
+                            content: (data.msg || I18n.system_add_fail),
+                            icon: '2'
+                        });
+                    }
+                });
+        }
+    });
+    $("#addModal").on('hide.bs.modal', function () {
+        $("#addModal .form")[0].reset();
+        addModalValidate.resetForm();
+        $("#addModal .form .form-group").removeClass("has-error");
+        $(".remote_panel").show();	// remote
+
+        $("#addModal .form input[name='executorHandler']").removeAttr("readonly");
+    });
+
+    // job operate
+    $("#role_list").on('click', '.role_operate',function() {
+        var typeName;
+        var url;
+        var needFresh = false;
+
+        var type = $(this).attr("_type");
+        if ("role_del" === type) {
+            typeName = I18n.system_opt_del ;
+            url = base_url + "/roles/delete";
+            needFresh = true;
+        } else {
+            return;
+        }
+
+        var id = $(this).parent('p').attr("id");
+
+        layer.confirm( I18n.system_ok + typeName + '?', {
+            icon: 3,
+            title: I18n.system_tips ,
+            btn: [ I18n.system_ok, I18n.system_cancel ]
+        }, function(index){
+            layer.close(index);
+
+            $.ajax({
+                type : 'POST',
+                url : url,
+                data : {
+                    "id" : id
+                },
+                dataType : "json",
+                success : function(data){
+                    if (data.code == 200) {
+
+                        layer.open({
+                            title: I18n.system_tips,
+                            btn: [ I18n.system_ok ],
+                            content: typeName + I18n.system_success ,
+                            icon: '1',
+                            end: function(layero, index){
+                                if (needFresh) {
+                                    //window.location.reload();
+                                    roleTable.fnDraw(false);
+                                }
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: I18n.system_tips,
+                            btn: [ I18n.system_ok ],
+                            content: (data.msg || typeName + I18n.system_fail ),
+                            icon: '2'
+                        });
+                    }
+                }
+            });
+        });
+    });
 });
 
 

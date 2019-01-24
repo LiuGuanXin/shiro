@@ -4,9 +4,9 @@
   	<#import "../common/common.macro.ftl" as netCommon>
 	<@netCommon.commonStyle />
 	<!-- DataTables -->
-  	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   	<!-- daterangepicker -->
-  	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+  	<#--<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">-->
     <title>${I18n.admin_name}</title>
     <#--<style type="text/css">-->
         <#--#userRole{-->
@@ -121,7 +121,7 @@
                     <form class="form-horizontal form" role="form" >
                         <div class="form-group">
                             <#--<label for="lastname" class="col-sm-2 control-label">用户名<font color="red">*</font></label>-->
-                            <div class="col-sm-4"><input type="text" class="form-control" name="roleName" placeholder="请输入角色名" maxlength="10" ></div>
+                            <div class="col-sm-4"><input type="text" class="form-control" name="roleDesc" placeholder="请输入角色名" maxlength="10" ></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-6">
@@ -135,6 +135,27 @@
             </div>
         </div>
     </div>
+    <%--弹框--%>
+    <div class="modal fade bs-example-modal-sm"  id="selectResources" tabindex="-1" role="dialog" aria-labelledby="selectRoleLabel">
+        <div class="modal-dialog modal-sm" role="document" style="height: 600px; "  >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="selectRoleLabel">分配权限</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="boxRoleForm" >
+                        <ul id="treeDemo" class="ztree"></ul>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="saveRoleResources();" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%----/弹框--%>
 	<!-- footer -->
 	<@netCommon.commonFooter />
 </div>
@@ -144,9 +165,9 @@
 <!-- DataTables -->
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="${request.contextPath}/static/plugins/jquery/jquery.validate.min.js"></script>
 <!-- daterangepicker -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
-<script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script src="${request.contextPath}/static/js/role.index.1.js"></script>
 </body>
 </html>

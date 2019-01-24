@@ -6,6 +6,7 @@ import com.xxl.job.admin.model.Role;
 import com.xxl.job.admin.model.RoleResources;
 import com.xxl.job.admin.service.RoleResourcesService;
 import com.xxl.job.admin.service.RoleService;
+import com.xxl.job.core.biz.model.ReturnT;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,30 +67,30 @@ public class RoleController {
     @RequestMapping("/saveRoleResources")
     public String saveRoleResources(RoleResources roleResources){
         if(StringUtils.isEmpty(roleResources.getRoleId()))
-            return "error";
+            return "fail";
         try {
             roleResourcesServiceImpl.addRoleResources(roleResources);
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
-            return "fail";
+            return "error";
         }
     }
     @ResponseBody
     @RequestMapping(value = "/add")
-    public String add(Role role) {
-        return roleServiceImpl.addRole(role);
+    public ReturnT<String> add(Role role) {
+        return new ReturnT<String>(roleServiceImpl.addRole(role));
 
     }
     @ResponseBody
     @RequestMapping(value = "/delete")
-    public String delete(Integer id){
+    public ReturnT<String> delete(Integer id){
         try{
             roleServiceImpl.delRole(id);
-            return "success";
+            return ReturnT.SUCCESS;
         }catch (Exception e){
             e.printStackTrace();
-            return "fail";
+            return ReturnT.FAIL;
         }
     }
 

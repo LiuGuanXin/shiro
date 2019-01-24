@@ -11,6 +11,9 @@ public interface RoleService {
     public List<Role> queryRoleListWithSelected(Integer uid);
 
     public Role queryRole(Integer id);
+
+    public List<Role> queryAll();
+
     PageInfo<Role> selectByPage(int start, int length);
 
     /**

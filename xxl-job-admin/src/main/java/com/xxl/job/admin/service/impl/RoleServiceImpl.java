@@ -8,6 +8,7 @@ import com.xxl.job.admin.model.Role;
 import com.xxl.job.admin.model.RoleResources;
 import com.xxl.job.admin.service.RoleResourcesService;
 import com.xxl.job.admin.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,12 @@ public class RoleServiceImpl implements RoleService {
     public Role queryRole(Integer id){
         return roleMapper.queryRole(id);
     }
+
+    @Override
+    public List<Role> queryAll() {
+        return roleMapper.selectRolesList();
+    }
+
     @Override
     public PageInfo<Role> selectByPage(int start, int length) {
         int page = start/length + 1;
@@ -50,6 +57,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @RequiresRoles("1")
     public String addRole(Role role) {
         Role role1 = roleMapper.selectRole(role.getId());
         if (role1 != null)

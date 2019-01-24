@@ -25,9 +25,8 @@ public interface RoleMapper {
     @Select("SELECT * FROM role")
     public List<Role> selectRolesList();
 
-
     @Select("SELECT * FROM role WHERE id = #{id}")
-    public Role selectRole(Integer uid);
+    public Role selectRole(Integer id);
     /**
      * 删除角色 同时删除角色资源表中的数据
      * @param roleId

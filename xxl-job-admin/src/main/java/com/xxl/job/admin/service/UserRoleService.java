@@ -13,5 +13,7 @@ public interface UserRoleService{
     public void addUserRole(UserRole userRole);
 
     public void delUserRole(Integer userId);
+
     public List<Integer> getRoleByUser(Integer userId);
+
 }

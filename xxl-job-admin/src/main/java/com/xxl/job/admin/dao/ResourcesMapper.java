@@ -23,4 +23,8 @@ public interface ResourcesMapper {
 
     @Select("select * from resources")
     public List<Resources> queryAll();
+    @Select("SELECT re.id,re.name,re.parentId,re.resUrl,re.type, (CASE WHEN EXISTS(SELECT 1 FROM role_resources rr \n" +
+            "WHERE rr.resourcesId=re.id AND rr.roleId=#{rid})THEN 'true' ELSE 'false' END) AS checked\n" +
+            "FROM resources re WHERE re.parentId !=0")
+    public List<Resources> queryResourcesListWithSelected(Integer rid);
 }

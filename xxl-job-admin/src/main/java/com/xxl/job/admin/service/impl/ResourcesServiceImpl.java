@@ -37,7 +37,7 @@ public class ResourcesServiceImpl implements ResourcesService {
 
     @Override
     public List<Resources> queryResourcesListWithSelected(Integer rid) {
-        return null;
+        return resourcesMapper.queryResourcesListWithSelected(rid);
     }
 
     @Override

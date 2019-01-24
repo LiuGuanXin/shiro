@@ -4,6 +4,7 @@ package com.xxl.job.admin.controller;
 import com.github.pagehelper.PageInfo;
 import com.xxl.job.admin.model.Resources;
 import com.xxl.job.admin.service.ResourcesService;
+import com.xxl.job.core.biz.model.ReturnT;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,15 +62,15 @@ public class ResourcesController {
     @ResponseBody
     //@CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/add")
-    public String add(Resources resources){
+    public ReturnT<String> add(Resources resources){
         try{
             resourcesServiceImpl.addResources(resources);
             //更新权限
 //            shiroService.updatePermission();
-            return "success";
+            return ReturnT.SUCCESS;
         }catch (Exception e){
             e.printStackTrace();
-            return "fail";
+            return ReturnT.FAIL;
         }
     }
     @ResponseBody

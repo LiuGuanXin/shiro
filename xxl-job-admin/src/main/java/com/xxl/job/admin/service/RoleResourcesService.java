@@ -10,5 +10,5 @@ public interface RoleResourcesService {
     public void addRoleResources(RoleResources roleResources);
 
     public void deleteResourcesByRole(Integer roleId);
-
+    public void deleteResourcesByResources(Integer id);
 }

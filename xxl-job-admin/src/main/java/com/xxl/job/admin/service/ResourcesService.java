@@ -18,5 +18,6 @@ public interface ResourcesService {
     public List<Resources> queryResourcesListWithSelected(Integer rid);
     public List<Resources> queryAll();
     public void addResources(Resources resources);
+    public void updateResources(Resources resources);
     public void deleteById(Integer id);
 }

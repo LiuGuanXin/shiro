@@ -17,4 +17,7 @@ public interface RoleResourcesMapper {
     public void deleteResourcesByRole(Integer roleId);
     @Insert("insert into role_resources (roleId,resourcesId) values (#{roleId},#{resourcesId})")
     public void insertRoleResources(RoleResources roleResources);
+    @Delete("delete from role_resources where resourcesId = #{id}")
+    public void deleteResourcesByResources(Integer id);
+
 }

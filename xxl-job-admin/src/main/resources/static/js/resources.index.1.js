@@ -139,6 +139,9 @@ $(function() {
         errorClass : 'help-block',
         focusInvalid : true,
         rules : {
+            id: {
+
+            },
             name : {
                 required : true
             },
@@ -154,6 +157,9 @@ $(function() {
             }
         },
         messages : {
+            id:{
+
+            },
             name : {
                 required : "请输入资源名称"
             },
@@ -220,6 +226,7 @@ $(function() {
         var row = tableData['key'+id];
 
         // base data
+        $("#addModal .form input[name='id']").val(id);
         $("#addModal .form input[name='name']").val( row.name );
         $("#addModal .form input[name='parentid']").val( row.parentid );
         $("#addModal .form input[name='resurl']").val( row.resurl );
@@ -230,7 +237,7 @@ $(function() {
     });
 
     // job operate
-    $("#role_list").on('click', '.resources_operate',function() {
+    $("#resources_list").on('click', '.resources_operate',function() {
         var typeName;
         var url;
         var needFresh = false;
@@ -271,7 +278,7 @@ $(function() {
                             end: function(layero, index){
                                 if (needFresh) {
                                     //window.location.reload();
-                                    roleTable.fnDraw(false);
+                                    resourcesTable.fnDraw(false);
                                 }
                             }
                         });

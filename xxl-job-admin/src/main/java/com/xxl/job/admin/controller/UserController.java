@@ -83,28 +83,38 @@ public Map<String, Object> pageList(@RequestParam(required = false, defaultValue
      */
     @ResponseBody
     @RequestMapping("/saveUserRoles")
-    public ReturnT<String> saveUserRoles(UserRole userRole){
+    public String saveUserRoles(UserRole userRole){
+        if (!SecurityUtils.getSubject().isPermitted("/users/saveUserRoles")){
+            return "noPer";
+        }
         if(StringUtils.isEmpty(userRole.getUserId()))
-            return ReturnT.FAIL;
+            return "";
         try {
             userRoleService.addUserRole(userRole);
-            return ReturnT.SUCCESS;
+            return "success";
         } catch (Exception e) {
             e.printStackTrace();
-            return ReturnT.FAIL;
+            return "";
         }
     }
 
     @ResponseBody
     @RequestMapping(value = "/add")
     public ReturnT<String> add(User user) {
+        if (!SecurityUtils.getSubject().isPermitted("/users/add")){
+            return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足");
+        }
         return new ReturnT<String>(userService.addUser(user));
     }
     @ResponseBody
-//    @RequiresPermissions("users/delete")delete
+//    @RequiresPermissions("users/delete")
     @RequestMapping(value = "/delete")
     public ReturnT<String> delete(Integer id){
-        if (!SecurityUtils.getSubject().isPermitted("users/delete")){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if (id.equals(user.getId())){
+            return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足");
+        }
+        if (!SecurityUtils.getSubject().isPermitted("/users/delete")){
             return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足");
         }
         try{

@@ -7,6 +7,7 @@ import com.xxl.job.admin.model.RoleResources;
 import com.xxl.job.admin.service.RoleResourcesService;
 import com.xxl.job.admin.service.RoleService;
 import com.xxl.job.core.biz.model.ReturnT;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class RoleController {
         this.roleResourcesServiceImpl = roleResourcesServiceImpl;
     }
 
-    @RequiresRoles("1")
+//    @RequiresRoles("1")
     @RequestMapping
     public String getAll(
                          @RequestParam(required = false, defaultValue = "0") int start,
@@ -66,6 +67,9 @@ public class RoleController {
     @ResponseBody
     @RequestMapping("/saveRoleResources")
     public String saveRoleResources(RoleResources roleResources){
+        if (!SecurityUtils.getSubject().isPermitted("/roles/saveRoleResources")){
+            return "noPer";
+        }
         if(StringUtils.isEmpty(roleResources.getRoleId()))
             return "fail";
         try {

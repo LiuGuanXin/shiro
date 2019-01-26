@@ -6,6 +6,11 @@
 	<!-- DataTables -->
     <link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   	<!-- daterangepicker -->
+    <#--<link rel="stylesheet" href="${request.contextPath}/static/css/bootstrap.min.css}" />-->
+    <#--<link rel="stylesheet" href="${request.contextPath}/static/css/jquery.dataTables.min.css}" />-->
+    <#--<link rel="stylesheet" href="${request.contextPath}/static/css/matrix-style.css}" />-->
+    <#--<link rel="stylesheet" href="${request.contextPath}/static/css/matrix-media.css}" />-->
+    <#--<link rel="stylesheet" href="${request.contextPath}/static/css/metroStyle.css}" type="text/css">-->
   	<#--<link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">-->
     <title>${I18n.admin_name}</title>
     <#--<style type="text/css">-->
@@ -70,11 +75,11 @@
                 <div class="col-xs-1" style="padding: 0;width: 6%;margin-left: 5px">
                     <button class="btn btn-block btn-info" id="searchBtn">${I18n.system_search}</button>
                 </div>
-                <div style="width:260px;float: right;overflow: hidden">
-                    <#--<button id="userRole" class="btn btn-default" style="float: right;margin-right:15px;width:100px">${I18n.user_role}</button>-->
-                    <#--<button id="userDel"  class="btn btn-default" style="float: right;margin-right:2px">${I18n.user_del}</button>-->
-                    <button id="userAdd"  class="btn btn-default add" style="float: right;margin-right:15px;width:100px">${I18n.user_add}</button>
-                </div>
+                <#--<div style="width:260px;float: right;overflow: hidden">-->
+                    <#--&lt;#&ndash;<button id="userRole" class="btn btn-default" style="float: right;margin-right:15px;width:100px">${I18n.user_role}</button>&ndash;&gt;-->
+                    <#--&lt;#&ndash;<button id="userDel"  class="btn btn-default" style="float: right;margin-right:2px">${I18n.user_del}</button>&ndash;&gt;-->
+                    <#--<button id="userAdd"  class="btn btn-default add" style="float: right;margin-right:15px;width:100px">${I18n.user_add}</button>-->
+                <#--</div>-->
           	</div>
 			
 			<div class="row">
@@ -135,27 +140,42 @@
             </div>
         </div>
     </div>
-    <%--弹框--%>
-    <div class="modal fade bs-example-modal-sm"  id="selectResources" tabindex="-1" role="dialog" aria-labelledby="selectRoleLabel">
-        <div class="modal-dialog modal-sm" role="document" style="height: 600px; "  >
+
+
+    <div class="modal fade" id="selectResources" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="selectRoleLabel">分配权限</h4>
+                    <h4 class="modal-title">分配权限</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="boxRoleForm" >
-                        <ul id="treeDemo" class="ztree"></ul>
+                    <form class="form-horizontal boxRoleForm" role="form">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="saveRoleResources();" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
     </div>
-    <%----/弹框--%>
+    <#--<%--弹框--%>-->
+    <#--<div class="modal fade bs-example-modal-sm"  id="selectResources" tabindex="-1" role="dialog" aria-labelledby="selectRoleLabel">-->
+        <#--<div class="modal-dialog modal-sm" role="document" style="height: 600px; "  >-->
+            <#--<div class="modal-content">-->
+                <#--<div class="modal-header">-->
+                    <#--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <#--<h4 class="modal-title" id="selectRoleLabel">分配权限</h4>-->
+                <#--</div>-->
+                <#--<div class="modal-body">-->
+                    <#--<form id="boxRoleForm" >-->
+
+                    <#--</form>-->
+                <#--</div>-->
+                <#--<div class="modal-footer">-->
+                    <#--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <#--<button type="button" onclick="saveRoleResources();" class="btn btn-primary">Save</button>-->
+                <#--</div>-->
+            <#--</div>-->
+        <#--</div>-->
+    <#--</div>-->
+    <#--<%----/弹框--%>-->
 	<!-- footer -->
 	<@netCommon.commonFooter />
 </div>
@@ -168,6 +188,9 @@
 <script src="${request.contextPath}/static/plugins/jquery/jquery.validate.min.js"></script>
 <!-- daterangepicker -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
+<#--<script src="${request.contextPath}/static/adminlte/bower_components/jquery/jquery.min.js"></script>-->
+<#--<script src="${request.contextPath}/static/adminlte/bower_components/jquery/jquery.ztree.excheck.js"></script>-->
+<#--<script src="${request.contextPath}/static/adminlte/bower_components/jquery/layer.js"></script>-->
 <script src="${request.contextPath}/static/js/role.index.1.js"></script>
 </body>
 </html>

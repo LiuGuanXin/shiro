@@ -122,6 +122,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form" role="form" >
+                        <input type="hidden" class="form-control" name="id" placeholder="请输入资源名称" maxlength="10" >
                         <div class="form-group">
                             <label for="lastname" class="col-sm-2 control-label">资源名称<font color="red">*</font></label>
                             <div class="col-sm-4"><input type="text" class="form-control" name="name" placeholder="请输入资源名称" maxlength="10" ></div>
@@ -137,9 +138,9 @@
                         <div class="form-group">
                             <label for="firstname" class="col-sm-2 control-label">资源类型<font color="red">*</font></label>
                             <div class="col-sm-4">
-                                <select class="form-control" name="resType" >
-                                    <option value="menu" >菜单</option>
-                                    <option value="but" >按钮</option>
+                                <select class="form-control" name="type" >
+                                    <option value="1" >菜单</option>
+                                    <option value="2" >按钮</option>
                                 </select>
                             </div>
                         </div>

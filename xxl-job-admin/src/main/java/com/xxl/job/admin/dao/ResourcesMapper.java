@@ -2,10 +2,7 @@ package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.model.Resources;
 import com.xxl.job.admin.sqlProvider.ResourcesProvider;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +24,12 @@ public interface ResourcesMapper {
             "WHERE rr.resourcesId=re.id AND rr.roleId=#{rid})THEN 'true' ELSE 'false' END) AS checked\n" +
             "FROM resources re WHERE re.parentId !=0")
     public List<Resources> queryResourcesListWithSelected(Integer rid);
+
+
+    @Insert("INSERT INTO resources (name,resUrl,type,parentId) values(#{name},#{resurl},#{type},#{parentid})")
+    public void insert(Resources resources);
+    @Delete("DELETE from resources WHERE id = #{id}")
+    public void delete(Integer id);
+    @Delete("update resources set name=#{name},resUrl=#{resurl},type=#{type},parentId=#{parentid} WHERE id = #{id}")
+    public void update(Resources resources);
 }

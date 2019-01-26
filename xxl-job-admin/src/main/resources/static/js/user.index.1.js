@@ -272,15 +272,6 @@ $(function() {
 
         $("#addModal .form input[name='executorHandler']").removeAttr("readonly");
     });
-    // $(function () {
-    //     $('#addUserModal').on('hide.bs.modal', function () {
-    //     // 关闭时清空edit状态为add
-    //     $("#act").val("add");
-    //     location.reload();
-    // })
-    // }
-    // );
-
 
 
     $("#user_list").on('click', '.user_role',function() {
@@ -294,14 +285,21 @@ $(function() {
             dataType:'json',
             success: function(data){
                 $("#addRole .form").empty();
-                var htm = "<div class='form-group'><input type='hidden' name='userId' value='"+id+"'>";
+                var htm = "<ul><input type='hidden' name='userId' value='"+id+"'>";
                 for(var i=0;i<data.length;i++){
-                    htm += "<div class='checkbox'><label><input type='checkbox' name='roleId' value='"+data[i].id+"'";
+                    htm += "<li><label><input type='checkbox' name='roleId' value='"+data[i].id+"'";
                     if(data[i].selected==1){
                         htm += " checked='checked'";
                     }
-                    htm +="/>"+data[i].roleDesc+"</label></div></div>";
+                    htm +="/>"+data[i].roleDesc+"</label></li>";
                 }
+                htm += "</ul><div class=\"form-group\">\n" +
+                    "<div class=\"col-sm-offset-3 col-sm-6\">\n" +
+                    "<button type=\"button\" onclick=\"saveUserRoles();\" class=\"btn btn-primary\"  >保存</button>\n" +
+                    "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">取消</button>\n" +
+                    "<input type=\"hidden\" name=\"id\" >\n" +
+                    "</div>\n" +
+                    "</div>";
                 $("#addRole .form").append(htm);
             }
         });
@@ -321,7 +319,10 @@ function saveUserRoles() {
             if(data=="success"){
                  layer.msg('保存成功');
                 $('#addRole').modal('hide');
-            }else{
+            }else if (data=="noPer"){
+                layer.msg('没有权限');
+                $('#addRole').modal('hide');
+            } else{
                  layer.msg('保存失败');
                 $('#addRole').modal('hide');
             }

@@ -46,15 +46,15 @@ $(function() {
             },
             {
                 "data": I18n.system_opt ,
-                "width":'4%',
+                "width":'3%',
                 "render": function ( data, type, row ) {
                     return function(){
 
                         var html = '<p id="'+ row.id +'" >'+
-                            '<button class="btn btn-info btn-xs user_role" type="button">'+ '分配权限' +'</button>  '+
+                            '<button class="btn btn-info btn-xs role_resources" type="button">'+ '分配权限' +'</button>  '+
                             // '<button class="btn btn-warning btn-xs update" type="button">'+ I18n.system_opt_edit +'</button>  '+
-                            '<button class="btn btn-danger btn-xs role_operate" _type="role_del" type="button">'+ I18n.system_opt_del +'</button>  '
-                            +
+                            // '<button class="btn btn-danger btn-xs role_operate" _type="role_del" type="button">'+ I18n.system_opt_del +'</button>  '
+                            // +
 
                             '</p>';
 
@@ -89,23 +89,23 @@ $(function() {
         }
     });
 
-    $("#role_list").on('click', '.user_role',function() {
+    $("#role_list").on('click', '.role_resources',function() {
         //弹出选择角色的框
         var id = $(this).parent('p').attr("id");
         roleId = id;
-        var setting = {
-            check: {
-                enable: true,
-                chkboxType:  { "Y" : "p", "N" : "s" }
-            },
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey: "id",
-                    pIdKey: "parentid",
-                }
-            }
-        };
+        // var setting = {
+        //     check: {
+        //         enable: true,
+        //         chkboxType:  { "Y" : "p", "N" : "s" }
+        //     },
+        //     data: {
+        //         simpleData: {
+        //             enable: true,
+        //             idKey: "id",
+        //             pIdKey: "parentid",
+        //         }
+        //     }
+        // };
         $.ajax({
             async:false,
             type : "POST",
@@ -113,14 +113,29 @@ $(function() {
             url: "resources/resourcesWithSelected",
             dataType:'json',
             success: function(data){
+                $("#selectResources .boxRoleForm").empty();
+                var htm = "<ul><input type='hidden' name='roleId' value='"+id+"'>";
+                for(var i=0;i<data.length;i++) {
 
-                $.fn.zTree.init($("#treeDemo"), setting, data);
-                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-                zTree.expandAll(true);
+                    htm += "<li><label><input type='checkbox' name='resourcesId' value='" + data[i].id + "'";
+                    if (data[i].checked === 'true') {
+                        htm += " checked='checked'";
+                    }
+                    htm += "/>" + data[i].name + "</label></li>";
+                }
+                // htm +="</ul>";
+                htm += "</ul><div class=\"form-group\">\n" +
+                    "<div class=\"col-sm-offset-3 col-sm-6\">\n" +
+                    "<button type=\"button\" onclick=\"saveRoleResources();\" class=\"btn btn-primary\"  >保存</button>\n" +
+                    "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">取消</button>\n" +
+                    "<input type=\"hidden\" name=\"id\" >\n" +
+                    "</div>\n" +
+                    "</div>";
+                $("#selectResources .boxRoleForm").append(htm);
                 $('#selectResources').modal();
             }
         });
-        $('#addRole').modal();
+        $('#selectResources').modal();
     });
 
     // search Btn
@@ -191,9 +206,8 @@ $(function() {
         $("#addModal .form .form-group").removeClass("has-error");
         $(".remote_panel").show();	// remote
 
-        $("#addModal .form input[name='executorHandler']").removeAttr("readonly");
+        // $("#addModal .form input[name='executorHandler']").removeAttr("readonly");
     });
-
     // job operate
     $("#role_list").on('click', '.role_operate',function() {
         var typeName;
@@ -253,7 +267,28 @@ $(function() {
         });
     });
 });
-
+//保存角色的选择
+function saveRoleResources() {
+    $.ajax({
+        cache: true,
+        type: "POST",
+        url: base_url +'/roles/saveRoleResources',
+        data:$('#selectResources .boxRoleForm').serialize(),// 你的formid
+        async: false,
+        success: function(data) {
+            if(data==="success"){
+                layer.msg('保存成功');
+                $('#selectResources').modal('hide');
+            }else if (data==="noPer") {
+                layer.msg('没有权限');
+                $('#selectResources').modal('hide');
+            }else{
+                layer.msg('保存失败');
+                $('#selectResources').modal('hide');
+            }
+        }
+    })
+}
 
 // Com Alert by Tec theme
 var ComAlertTec = {

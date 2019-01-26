@@ -58,4 +58,8 @@ public class RoleResourcesServiceImpl implements RoleResourcesService {
     public void deleteResourcesByRole(Integer roleId) {
         roleResourcesMapper.deleteResourcesByRole(roleId);
     }
+    @Override
+    public void deleteResourcesByResources(Integer id) {
+        roleResourcesMapper.deleteResourcesByResources(id);
+    }
 }

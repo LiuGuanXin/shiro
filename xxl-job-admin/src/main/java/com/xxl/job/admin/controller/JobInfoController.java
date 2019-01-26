@@ -70,7 +70,7 @@ public class JobInfoController {
 
 	@RequestMapping("/add")
 	@ResponseBody
-	@RequiresPermissions("/usersPage")
+//	@RequiresPermissions("/usersPage")
 	public ReturnT<String> add(XxlJobInfo jobInfo) {
 		return xxlJobService.add(jobInfo);
 	}
@@ -87,7 +87,7 @@ public class JobInfoController {
 		}
 
 	}
-	
+
 	@RequestMapping("/remove")
 	@ResponseBody
 	public ReturnT<String> remove(int id) {

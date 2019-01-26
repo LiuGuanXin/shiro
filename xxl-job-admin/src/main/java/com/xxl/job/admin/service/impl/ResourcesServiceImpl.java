@@ -4,9 +4,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xxl.job.admin.dao.ResourcesMapper;
 import com.xxl.job.admin.model.Resources;
+import com.xxl.job.admin.model.RoleResources;
 import com.xxl.job.admin.service.ResourcesService;
+import com.xxl.job.admin.service.RoleResourcesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,9 @@ import java.util.Map;
 public class ResourcesServiceImpl implements ResourcesService {
     @Autowired
     public ResourcesMapper resourcesMapper;
+
+    @Autowired
+    public RoleResourcesService roleResourcesServiceImpl;
     @Override
     public List<Resources> loadUserResources(Map<String, Object> map) {
         return resourcesMapper.loadUserResources(map);
@@ -47,11 +53,15 @@ public class ResourcesServiceImpl implements ResourcesService {
 
     @Override
     public void addResources(Resources resources) {
-
+        resourcesMapper.insert(resources);
     }
-
+    public void updateResources(Resources resources){
+        resourcesMapper.update(resources);
+    }
     @Override
+    @Transactional
     public void deleteById(Integer id) {
-
+        resourcesMapper.delete(id);
+        roleResourcesServiceImpl.deleteResourcesByResources(id);
     }
 }

@@ -13,6 +13,7 @@ import com.xxl.job.core.biz.model.LogResult;
 import com.xxl.job.core.biz.model.ReturnT;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -175,7 +176,9 @@ public class JobLogController {
 	@RequestMapping("/clearLog")
 	@ResponseBody
 	public ReturnT<String> clearLog(int jobGroup, int jobId, int type){
-
+		if (!SecurityUtils.getSubject().isPermitted("/joblog/clearLog")){
+			return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足");
+		}
 		Date clearBeforeTime = null;
 		int clearBeforeNum = 0;
 		if (type == 1) {

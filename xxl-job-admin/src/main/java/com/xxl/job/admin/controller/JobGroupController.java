@@ -11,6 +11,7 @@ import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.RegistryConfig;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,9 @@ public class JobGroupController {
 	@RequestMapping("/save")
 	@ResponseBody
 	public ReturnT<String> save(XxlJobGroup xxlJobGroup){
-
+		if (!SecurityUtils.getSubject().isPermitted("/jobgroup/save")){
+			return new ReturnT<String>(ReturnT.FAIL_CODE,"没有权限");
+		}
 		// valid
 		if (xxlJobGroup.getAppName()==null || StringUtils.isBlank(xxlJobGroup.getAppName())) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );
@@ -78,6 +81,9 @@ public class JobGroupController {
 	@RequestMapping("/update")
 	@ResponseBody
 	public ReturnT<String> update(XxlJobGroup xxlJobGroup){
+		if (!SecurityUtils.getSubject().isPermitted("/jobgroup/update")){
+			return new ReturnT<String>(ReturnT.FAIL_CODE,"没有权限");
+		}
 		// valid
 		if (xxlJobGroup.getAppName()==null || StringUtils.isBlank(xxlJobGroup.getAppName())) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );
@@ -139,7 +145,9 @@ public class JobGroupController {
 	@RequestMapping("/remove")
 	@ResponseBody
 	public ReturnT<String> remove(int id){
-
+		if (!SecurityUtils.getSubject().isPermitted("/jobgroup/remove")){
+			return new ReturnT<String>(ReturnT.FAIL_CODE,"没有权限");
+		}
 		// valid
 		int count = xxlJobInfoDao.pageListCount(0, 10, id, null, null);
 		if (count > 0) {

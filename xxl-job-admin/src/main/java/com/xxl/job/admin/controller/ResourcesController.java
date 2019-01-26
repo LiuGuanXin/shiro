@@ -63,10 +63,27 @@ public class ResourcesController {
     //@CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/add")
     public ReturnT<String> add(Resources resources){
+        if (!(resources.getId() == null)){
+            return update(resources);
+        }
+        if (!SecurityUtils.getSubject().isPermitted("/resources/add")){
+            return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足!");
+        }
         try{
             resourcesServiceImpl.addResources(resources);
-            //更新权限
-//            shiroService.updatePermission();
+
+            return ReturnT.SUCCESS;
+        }catch (Exception e){
+            e.printStackTrace();
+            return ReturnT.FAIL;
+        }
+    }
+    public ReturnT<String> update(Resources resources){
+        if (!SecurityUtils.getSubject().isPermitted("/resources/update")){
+            return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足!");
+        }
+        try{
+            resourcesServiceImpl.updateResources(resources);
             return ReturnT.SUCCESS;
         }catch (Exception e){
             e.printStackTrace();
@@ -76,15 +93,18 @@ public class ResourcesController {
     @ResponseBody
     //@CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/delete")
-    public String delete(Integer id){
+    public ReturnT<String> delete(Integer id){
+        if (!SecurityUtils.getSubject().isPermitted("/resources/delete")){
+            return new ReturnT<String>(ReturnT.FAIL_CODE,"权限不足!");
+        }
         try{
             resourcesServiceImpl.deleteById(id);
             //更新权限
 //            shiroService.updatePermission();
-            return "success";
+            return ReturnT.SUCCESS;
         }catch (Exception e){
             e.printStackTrace();
-            return "fail";
+            return ReturnT.FAIL;
         }
     }
 }

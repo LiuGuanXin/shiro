@@ -49,38 +49,38 @@
 		
 		<!-- Main content -->
 	    <section class="content">
-	    	<div class="row">
-                <div class="col-xs-3" style="width: 23%;margin-left:12px;padding: 0 ">
-                    <div class="input-group">
-                        <span class="input-group-addon">${I18n.user_field_num}</span>
-                        <input type="text" class="form-control" id="id" autocomplete="on" >
-                    </div>
-                </div>
-                <div class="col-xs-3" class="col-xs-3" style="width: 22%;padding: 0">
-                    <div class="input-group">
-                        <span class="input-group-addon">${I18n.jobinfo_field_name}</span>
-                        <input type="text" class="form-control" id="username" autocomplete="on" >
-                    </div>
-                </div>
-                <div class="col-xs-2" style="padding: 0">
-                    <div class="input-group">
-                        <span class="input-group-addon">${I18n.user_status}</span>
-                        <select class="form-control" id="enable" >
-                            <option value="2" >${I18n.user_status_all}</option>
-                            <option value="1" >${I18n.user_status_open}</option>
-                            <option value="0" >${I18n.user_status_close}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-xs-1" style="padding: 0;width: 6%;margin-left: 5px">
-                    <button class="btn btn-block btn-info" id="searchBtn">${I18n.system_search}</button>
-                </div>
-                <#--<div style="width:260px;float: right;overflow: hidden">-->
-                    <#--&lt;#&ndash;<button id="userRole" class="btn btn-default" style="float: right;margin-right:15px;width:100px">${I18n.user_role}</button>&ndash;&gt;-->
-                    <#--&lt;#&ndash;<button id="userDel"  class="btn btn-default" style="float: right;margin-right:2px">${I18n.user_del}</button>&ndash;&gt;-->
-                    <#--<button id="userAdd"  class="btn btn-default add" style="float: right;margin-right:15px;width:100px">${I18n.user_add}</button>-->
+	    	<#--<div class="row">-->
+                <#--<div class="col-xs-3" style="width: 23%;margin-left:12px;padding: 0 ">-->
+                    <#--<div class="input-group">-->
+                        <#--<span class="input-group-addon">${I18n.user_field_num}</span>-->
+                        <#--<input type="text" class="form-control" id="id" autocomplete="on" >-->
+                    <#--</div>-->
                 <#--</div>-->
-          	</div>
+                <#--<div class="col-xs-3" class="col-xs-3" style="width: 22%;padding: 0">-->
+                    <#--<div class="input-group">-->
+                        <#--<span class="input-group-addon">${I18n.jobinfo_field_name}</span>-->
+                        <#--<input type="text" class="form-control" id="username" autocomplete="on" >-->
+                    <#--</div>-->
+                <#--</div>-->
+                <#--<div class="col-xs-2" style="padding: 0">-->
+                    <#--<div class="input-group">-->
+                        <#--<span class="input-group-addon">${I18n.user_status}</span>-->
+                        <#--<select class="form-control" id="enable" >-->
+                            <#--<option value="2" >${I18n.user_status_all}</option>-->
+                            <#--<option value="1" >${I18n.user_status_open}</option>-->
+                            <#--<option value="0" >${I18n.user_status_close}</option>-->
+                        <#--</select>-->
+                    <#--</div>-->
+                <#--</div>-->
+                <#--<div class="col-xs-1" style="padding: 0;width: 6%;margin-left: 5px">-->
+                    <#--<button class="btn btn-block btn-info" id="searchBtn">${I18n.system_search}</button>-->
+                <#--</div>-->
+                <#--&lt;#&ndash;<div style="width:260px;float: right;overflow: hidden">&ndash;&gt;-->
+                    <#--&lt;#&ndash;&lt;#&ndash;<button id="userRole" class="btn btn-default" style="float: right;margin-right:15px;width:100px">${I18n.user_role}</button>&ndash;&gt;&ndash;&gt;-->
+                    <#--&lt;#&ndash;&lt;#&ndash;<button id="userDel"  class="btn btn-default" style="float: right;margin-right:2px">${I18n.user_del}</button>&ndash;&gt;&ndash;&gt;-->
+                    <#--&lt;#&ndash;<button id="userAdd"  class="btn btn-default add" style="float: right;margin-right:15px;width:100px">${I18n.user_add}</button>&ndash;&gt;-->
+                <#--&lt;#&ndash;</div>&ndash;&gt;-->
+          	<#--</div>-->
 			
 			<div class="row">
 				<div class="col-xs-12">

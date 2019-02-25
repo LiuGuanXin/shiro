@@ -25,6 +25,7 @@ import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ import java.util.*;
  * @author xuxueli 2016-5-28 15:30:33
  */
 @Service
+//@Cacheable(value="XxlJob")
 public class XxlJobServiceImpl implements XxlJobService {
 	private static Logger logger = LoggerFactory.getLogger(XxlJobServiceImpl.class);
 	@Autowired
@@ -49,13 +51,22 @@ public class XxlJobServiceImpl implements XxlJobService {
 	public XxlJobLogDao xxlJobLogDao;
 	@Resource
 	private XxlJobLogGlueDao xxlJobLogGlueDao;
-	
+//	@Cacheable(value="test", key="'carId_'+#id")
 	@Override
 	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String filterTime) {
-
+		List<XxlJobInfo> list;
+		int list_count;
+		User user = (User)SecurityUtils.getSubject().getPrincipal();
+		if (SecurityUtils.getSubject().hasRole("2")){
+			list = xxlJobInfoDao.xwebPageList(start, length, jobGroup, jobDesc, executorHandler,user.getId());
+			list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler);
+		}else {
+			list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, executorHandler);
+			list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler);
+		}
 		// page list
-		List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, executorHandler);
-		int list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler);
+//		List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, executorHandler);
+//		int list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler);
 		
 		// fill job info
 		if (list!=null && list.size()>0) {

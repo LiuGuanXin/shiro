@@ -14,7 +14,12 @@ import java.util.List;
  */
 @Mapper
 public interface XxlJobInfoDao {
-
+	public List<XxlJobInfo> xwebPageList(@Param("offset") int offset,
+									 @Param("pagesize") int pagesize,
+									 @Param("jobGroup") int jobGroup,
+									 @Param("jobDesc") String jobDesc,
+									 @Param("executorHandler") String executorHandler,
+									 @Param("userId") int userId);
 	public List<XxlJobInfo> pageList(@Param("offset") int offset,
 									 @Param("pagesize") int pagesize,
 									 @Param("jobGroup") int jobGroup,

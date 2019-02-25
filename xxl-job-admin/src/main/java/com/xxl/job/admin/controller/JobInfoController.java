@@ -5,15 +5,20 @@ import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
 import com.xxl.job.admin.core.trigger.TriggerTypeEnum;
+import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.model.User;
+import com.xxl.job.admin.service.UserService;
 import com.xxl.job.admin.service.UserTriggerService;
 import com.xxl.job.admin.service.XxlJobService;
 import com.xxl.job.admin.service.impl.UserTriggerServiceImpl;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.glue.GlueTypeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +49,8 @@ public class JobInfoController {
 	private XxlJobService xxlJobService;
 	@Autowired
 	private UserTriggerService userTriggerServiceImpl;
+	@Autowired
+	private UserService userServiceImpl;
 	@RequestMapping
 	public String index(Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
 
@@ -58,7 +66,28 @@ public class JobInfoController {
 
 		return "jobinfo/jobinfo.index";
 	}
-	
+//	@ResponseBody
+	@RequestMapping("/xweb")
+	public String xweb(String username){
+		User user = userServiceImpl.selectByUsername(username);
+		// 表面校验
+		if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())){
+			new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
+		}
+		// 获取主体
+		Subject subject = SecurityUtils.getSubject();
+		try{
+			// 调用安全认证框架的登录方法
+			subject.login(new UsernamePasswordToken(user.getUsername(), user.getPassword()));
+		}catch(AuthenticationException ex){
+			new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
+			return "没有权限";
+		}
+		// 登录成功后重定向到首页
+//		return new ModelAndView("redirect:/");
+		return "/jobinfo";
+	}
+
 	@RequestMapping("/pageList")
 	@ResponseBody
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,  
@@ -80,7 +109,7 @@ public class JobInfoController {
 	public ReturnT<String> update(XxlJobInfo jobInfo) {
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		int userId = userTriggerServiceImpl.queryUserIdByTriggerId(jobInfo.getId());
-		if (userId == user.getId()){
+		if (userId == user.getId()||SecurityUtils.getSubject().hasRole("3")){
 			return xxlJobService.update(jobInfo);
 		}else {
 			return new ReturnT<String>(500,"没有修改权限");
@@ -93,7 +122,7 @@ public class JobInfoController {
 	public ReturnT<String> remove(int id) {
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		Integer userId = userTriggerServiceImpl.queryUserIdByTriggerId(id);
-		if (userId != null && userId.equals(user.getId())){
+		if (SecurityUtils.getSubject().hasRole("3")||(userId != null && userId.equals(user.getId()))){
 			return xxlJobService.remove(id);
 		}else {
 			return new ReturnT<String>(500,"没有删除权限");

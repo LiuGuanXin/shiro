@@ -51,13 +51,25 @@ public class IndexController {
 
 		return "index";
 	}
-
     @RequestMapping("/chartInfo")
 	@ResponseBody
 	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
         ReturnT<Map<String, Object>> chartInfo = xxlJobService.chartInfo(startDate, endDate);
         return chartInfo;
     }
+
+	@RequestMapping("/xwebHide")
+	@ResponseBody
+	public Map<String,String> xwebHide() {
+		Map<String,String> map = new HashMap<>();
+		if (SecurityUtils.getSubject().hasRole("2")){
+			map.put("flag","true");
+			return map;
+		}else {
+			map.put("flag","false");
+		}
+		return map;
+	}
 	@RequestMapping("/checkPermission")
 	@ResponseBody
 	public Map<String,String> checkPermission() {

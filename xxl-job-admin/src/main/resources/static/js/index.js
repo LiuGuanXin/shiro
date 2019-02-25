@@ -1,26 +1,26 @@
 /**
  * Created by xuxueli on 17/4/24.
  */
-// $(document).ready( function () {
-//     var url = base_url + "/checkPermission";
-//     var hiddenFlag;
-//     $.ajax({
-//         type: "post",
-//         url: url,
-//         async : false,
-//         dataType: "json",
-//         success: function (data) {
-//             // alert(data.flag);
-//             hiddenFlag = data.flag;
-//             // console.log(JSON.parse(data));
-//             // console.log(data);
-//             // hiddenFlag = data[0].flag;
-//         }
-//     });
-//     if (hiddenFlag==="true"){
-//         $ (".manager").hide();
-//     };
-// } );
+$(document).ready( function () {
+    var url = base_url + "/xwebHide";
+    var hiddenFlag;
+    $.ajax({
+        type: "post",
+        url: url,
+        async : false,
+        dataType: "json",
+        success: function (data) {
+            // alert(data.flag);
+            hiddenFlag = data.flag;
+            // console.log(JSON.parse(data));
+            // console.log(data);
+            // hiddenFlag = data[0].flag;
+        }
+    });
+    if (hiddenFlag==="true"){
+        $ (".xwbHide").hide();
+    };
+} );
 $(function () {
 
     // filter Time

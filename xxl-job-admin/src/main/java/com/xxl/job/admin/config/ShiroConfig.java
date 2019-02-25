@@ -47,6 +47,7 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 //        //游客，开发权限
         filterChainDefinitionMap.put("/api/**", "anon");
+        filterChainDefinitionMap.put("/jobinfo/xweb/**", "anon");
         filterChainDefinitionMap.put("/guest/**", "anon");
         //用户，需要角色权限 “user”
 
